@@ -1,3 +1,6 @@
 [submodule "lib/fatfree-master"]
 	path = lib/fatfree-master
 	url = git@github.com:bcosca/fatfree.git
+[submodule "lib/FloraForm-template"]
+	path = lib/FloraForm-template
+	url = git@github.com:cgutteridge/FloraForm.git
