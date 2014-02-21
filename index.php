@@ -9,8 +9,8 @@ $f3->set("secondary_nav", array("Item 1"=>"#", "Item 2"=>"#", "Item 3"=>"#"));
 $f3->set("inpage_nav", array("Item 1"=>"#", "Item 2"=>"#", "Item 3"=>"#"));
 
 #DO NOT MODIFY THE INTERNAL STYLE FOLDER make your own templates
-$f3->set("left_column", array("internal_style/left_column.htm"));
-$f3->set("right_column", array("internal_style/right_column.htm"));
+$f3->set("left_column", array($f3->get("STYLE")."/left_column.htm"));
+$f3->set("right_column", array($f3->get("STYLE")."/right_column.htm"));
 
 $includes = array
 (
