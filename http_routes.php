@@ -1,5 +1,6 @@
 <?php
 
+
 function front_page($f3)
 {
 	$f3->set("title", "Hello");
