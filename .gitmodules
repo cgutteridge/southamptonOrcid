@@ -4,3 +4,9 @@
 [submodule "lib/FloraForm-template"]
 	path = lib/FloraForm-template
 	url = git@github.com:cgutteridge/FloraForm.git
+[submodule "lib/internalstyle"]
+	path = lib/internalstyle
+	url = git@sourcekettle.ecs.soton.ac.uk:projects/internalbrand.git
+[submodule "lib/ldapauth"]
+	path = lib/ldapauth
+	url = git@sourcekettle.ecs.soton.ac.uk:projects/ldapauth.git
