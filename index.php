@@ -17,7 +17,8 @@ $includes = array
         'functions.php',
         'http_routes.php',
         'lib/redbean/rb.php',
-        'lib/FloraForm-template/FloraForm.php'
+        'lib/FloraForm-template/FloraForm.php',
+	'lib/ldapauth/lib/authenticate.php'
 );
 
 foreach ($includes as $file)
