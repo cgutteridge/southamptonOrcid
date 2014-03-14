@@ -1,8 +1,8 @@
 <?php
 
 $f3=require('lib/fatfree-master/lib/base.php');
-$f3->config($f3->get("ROOT").'/config.ini');
-$f3->config($f3->get("ROOT").'/secrets.ini');
+$f3->config($f3->get("ROOT").$f3->get("BASE").'/config.ini');
+$f3->config($f3->get("ROOT").$f3->get("BASE").'/secrets.ini');
 
 $f3->set("main_nav", array("Item 1"=>"#", "Item 2"=>"#", "Item 3"=>"#"));
 $f3->set("secondary_nav", array("Item 1"=>"#", "Item 2"=>"#", "Item 3"=>"#"));
@@ -22,7 +22,7 @@ $includes = array
 
 foreach ($includes as $file)
 {
-        require_once($f3->get("ROOT")."/".$file);
+        require_once($f3->get("ROOT").$f3->get("BASE")."/".$file);
 }
 
 $f3->run();
