@@ -7,9 +7,6 @@
 [submodule "lib/internalstyle"]
 	path = lib/internalstyle
 	url = git@sourcekettle.ecs.soton.ac.uk:projects/internalbrand.git
-[submodule "lib/ldapauth"]
-	path = lib/ldapauth
-	url = git@sourcekettle.ecs.soton.ac.uk:projects/ldapauth.git
 [submodule "lib/tinymce"]
 	path = lib/tinymce
 	url = git@github.com:tinymce/tinymce.git
