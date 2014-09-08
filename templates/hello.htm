@@ -1,1 +1,41 @@
-<p>Oh hello, this is the demo</p>
+<p>The University of Southampton recommends that all research active members should register an <a href='http://orcid.org/'>ORCID</a>. This will be used to connect you to your work, even if you change instituion or even country. They look like a credit card number, eg. <a href='http://orcid.org/0000-0001-9201-5987'>0000-0001-9201-5987</a>.</p>
+
+<p>If you have already obtained an ORCID id code, please link it to your university identity using this page. If you don't already have an ORCID id then you should <a href='https://orcid.org/register'>register for an ORCID id</a>. </p>
+
+<hr>
+
+<p>Hello, Christopher Gutteridge. You currently have an ORCID registered: <a href='http://orcid.org/0000-0001-9201-5987'>0000-0001-9201-5987</a>.</p>
+
+<p>Available actions:</p>
+<ol>
+<li><form method='post' action='/remove'><input type='submit' value='Remove my ORCID id' /></form> - not recommended</li>
+<li><form method='post' action='/set'>Change my ORCID to orcid.org/<input name='orcid' width='20' /><input type='submit' value='save' /></form></li>
+</ol>
+
+<hr>
+
+<p>Hello, Christopher Gutteridge. You currently have an no ORCID registered with the University of Southampton.</p>
+
+<p>If you haven't already <a href='https://orcid.org/register'>registed at orcid.org</a>, please do so now and note the 16 digit code.</p>
+
+<p>Available actions:</p>
+<ol>
+<li><form method='post' action='/set'>Change my ORCID to orcid.org/<input name='orcid' width='20' /><input type='submit' value='save' /></form></li>
+</ol>
+
+<hr />
+
+
+<div id='info'></div>
+<script type='text/javascript'>
+$(document).ready( function() { 
+	var orcid='0000-0001-9201-5987';
+	$( '#info' ).html( "Looking up ORCID <a href='http://orcid.org/"+orcid+"'>"+orcid+"</a> in the orcid.org database..." );
+	$.ajax( "/orcid/"+orcid+".json" ).success( function(data) {
+		var pd = data["orcid-profile"]["orcid-bio"]["personal-details"];
+		var name = pd["family-name"]["value"]+", "+pd["given-names"]["value"];
+		$('#info').html( "<p>FOUND <a href='http://orcid.org/"+orcid+"'>"+orcid+"</a> in public database.</p><p>Name: <strong>"+name+"</strong></p>" );
+	} );
+} );
+</script>
+

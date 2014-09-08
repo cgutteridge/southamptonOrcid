@@ -1,5 +1,4 @@
 <?php
-
 $f3=require('lib/fatfree-master/lib/base.php');
 $f3->config($f3->get("ROOT").$f3->get("BASE").'/config.ini');
 $f3->config($f3->get("ROOT").$f3->get("BASE").'/secrets.ini');
@@ -20,6 +19,7 @@ $includes = array
         'lib/FloraForm-template/FloraForm.php',
 	'lib/ldapauth/lib/authenticate.php'
 );
+
 
 foreach ($includes as $file)
 {

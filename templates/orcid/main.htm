@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" id="viewport" content="initial-scale=1.0" />
+		<link rel="stylesheet" href="{{@SCHEME}}://{{@HOST}}{{@BASE}}/html_assets/{{@STYLE}}/uos-internal.css" />
+		<link rel="stylesheet" media="screen" href="{{@SCHEME}}://{{@HOST}}{{@BASE}}/html_assets/{{@STYLE}}/uos-mobile.css">
+		<link rel="stylesheet" media="screen" href="{{@SCHEME}}://{{@HOST}}{{@BASE}}/html_assets/floraform/ff.css">
+		<script type="text/javascript" src="{{@SCHEME}}://{{@HOST}}{{@BASE}}/html_assets/tiny_mce/tiny_mce.js"></script>
+		<script src="{{@SCHEME}}://{{@HOST}}{{@BASE}}/html_assets/jquery.js"></script>
+		<script src="{{@SCHEME}}://{{@HOST}}{{@BASE}}/html_assets/floraform/ff.js"></script>
+		<link rel="stylesheet" media="screen" href="{{@SCHEME}}://{{@HOST}}{{@BASE}}/html_assets/style.css">
+		<title>{{@title}} - {{@app_name}}</title>
+	</head>
+	<body>
+		<div class="uos-container">
+			<script type="text/javascript">
+				function showNavigation(){
+					document.getElementById("uos-header").style.display = "block";
+					document.getElementById("uos-hide-nav").style.display = "block";
+					document.getElementById("uos-show-nav").style.display = "none";
+					document.getElementById("uos-left-nav").style.display = "block";
+				}
+				function hideNavigation(){
+					document.getElementById("uos-header").style.display = "none";
+					document.getElementById("uos-hide-nav").style.display = "none";
+					document.getElementById("uos-show-nav").style.display = "block";
+					document.getElementById("uos-left-nav").style.display = "none";
+				}
+			</script>
+			<div class="uos-show-nav" id="uos-show-nav" onclick="showNavigation()">Show navigation</div>
+			<div class="uos-hide-nav" id="uos-hide-nav" onclick="hideNavigation()">Hide navigation</div>
+			<div class="uos-header" id="uos-header">
+				<div class="uos-logo"> </div>
+				<check if="{{isset(@user)}}">
+					<div class="uos-logged-in-user">Logged in as {{@user->givenname}} {{@user->familyname}} <a href="{{@BASE}}/logout">Log out</a></div>
+				</check>
+				<div class="uos-app-name">
+					<h1>{{@app_name}}</h1>
+					<h2>{{@app_tag_line}}</h2>
+				</div>
+			</div>
+			<div class="uos-main-block">
+				<div class="uos-left-block">
+					<repeat group="{{@left_column}}" value="{{@template}}">
+						<include href="{{@template}}" />
+					</repeat>
+				</div>
+				<div class="uos-page-content">
+					<h2>{{@title}}</h2>
+					<repeat group="{{@templates}}" value="{{@template}}">
+						<include href="{{@template}}" />
+					</repeat>
+				</div>
+				<div class="uos-right-block">
+					<repeat group="{{@right_column}}" value="{{@template}}">
+						<include href="{{@template}}" />
+					</repeat>
+				</div>
+			</div>
+			<div class="uos-footer">
+				<span class="item">Copyright &copy; University of Southampton</span>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,93 @@
+{
+   "orcid-profile" : {
+      "orcid-activities" : {
+         "affiliations" : null
+      },
+      "orcid-preferences" : {
+         "locale" : "EN"
+      },
+      "orcid-history" : {
+         "creation-method" : "WEBSITE",
+         "last-modified-date" : {
+            "value" : 1407428452760
+         },
+         "completion-date" : {
+            "value" : 1357896706674
+         },
+         "source" : null,
+         "visibility" : null,
+         "submission-date" : {
+            "value" : 1357895341119
+         },
+         "claimed" : {
+            "value" : true
+         }
+      },
+      "orcid-bio" : {
+         "scope" : null,
+         "biography" : {
+            "value" : "",
+            "visibility" : null
+         },
+         "delegation" : null,
+         "contact-details" : {
+            "address" : {
+               "country" : {
+                  "visibility" : null,
+                  "value" : "GB"
+               }
+            },
+            "email" : []
+         },
+         "personal-details" : {
+            "family-name" : {
+               "value" : "Gutteridge"
+            },
+            "given-names" : {
+               "value" : "Christopher"
+            }
+         },
+         "keywords" : {
+            "visibility" : null,
+            "keyword" : [
+               {
+                  "value" : "open data, eprints, rdf, linked data"
+               }
+            ]
+         },
+         "applications" : null,
+         "researcher-urls" : {
+            "visibility" : null,
+            "researcher-url" : [
+               {
+                  "url-name" : {
+                     "value" : "Homepage"
+                  },
+                  "url" : {
+                     "value" : "http://users.ecs.soton.ac.uk/cjg/"
+                  }
+               },
+               {
+                  "url-name" : {
+                     "value" : "Wikipedia"
+                  },
+                  "url" : {
+                     "value" : "https://en.wikipedia.org/wiki/Christopher_Gutteridge"
+                  }
+               }
+            ]
+         }
+      },
+      "type" : "USER",
+      "orcid" : null,
+      "client-type" : null,
+      "orcid-identifier" : {
+         "host" : "orcid.org",
+         "path" : "0000-0001-9201-5987",
+         "uri" : "http://orcid.org/0000-0001-9201-5987",
+         "value" : null
+      },
+      "group-type" : null
+   },
+   "message-version" : "1.1"
+}
