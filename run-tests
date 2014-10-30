@@ -10,7 +10,7 @@ if( php_sapi_name() != "cli" )
 
 $f3=require('lib/fatfree-master/lib/base.php');
 $f3->config($f3->get("ROOT").$f3->get("BASE").'/config.ini');
-$f3->config($f3->get("ROOT").$f3->get("BASE").'/secrets.ini');
+$f3->config($f3->get("ROOT").$f3->get("BASE").'/local.ini');
 require_once('database-functions.php');
 
 $p1 = "1000000";
