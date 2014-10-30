@@ -24,6 +24,10 @@ function local_authenticate($f3)
 	}
 }
 
+#######################################################
+# Pages
+#######################################################
+
 function page_error($f3)
 {
 	$f3->set("title", $f3->get('ERROR.code')." ".$f3->get('ERROR.status' ));
@@ -66,6 +70,10 @@ function render_page($f3)
 	$f3->set( "SESSION.messages", array() );
 }
 
+#######################################################
+# AJAX
+#######################################################
+
 function orcid_json($f3)
 {
 	# curl -H "Accept: application/orcid+json" 'http://pub.orcid.org/v1.1/0000-0001-7857-2795/orcid-bio' -L -i
@@ -88,5 +96,82 @@ function orcid_json($f3)
 }
 
 #######################################################
+# ORCID Auth Dance Steps
+#######################################################
 
+function orcid_authorise($f3)
+{
+	local_authenticate($f3);
 
+	$state = bin2hex(openssl_random_pseudo_bytes(16));
+	setcookie('oauth_state', $state, time() + 3600, null, null, false, true);
+
+	$url = $f3->get( "ORCID_OAUTH_AUTHORIZATION_URL" ) . '?' . http_build_query(array(
+		'response_type' => 'code',
+		'client_id' => $f3->get( "ORCID_OAUTH_CLIENT_ID" ),
+		'redirect_uri' => $f3->get( "ORCID_OAUTH_REDIRECT_URI" ),
+		'scope' => '/authenticate',
+		'state' => $state,
+	));
+
+	header('Location: ' . $url);
+}
+
+function orcid_return($f3)
+{
+	local_authenticate($f3);
+
+	// code is returned, check the state
+	if (!$_GET['state'] || $_GET['state'] !== $_COOKIE['oauth_state']) 
+	{
+		# this should not happen unless someone is doing something bad
+		# or doesn't have cookies enabled
+		$f3->push( "SESSION.messages", Template::instance()->render("msg-bad-state.htm") );
+		header( "Location: /profile" );
+		return;
+	}
+		
+	// fetch the access token
+	$curl = curl_init();
+
+	curl_setopt_array($curl, array(
+		CURLOPT_URL => $f3->get( "ORCID_OAUTH_TOKEN_URL" ),
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_HTTPHEADER => array('Accept: application/json'),
+		CURLOPT_POST => true,
+		CURLOPT_POSTFIELDS => http_build_query(array(
+			'code' => $_GET['code'],
+			'grant_type' => 'authorization_code',
+			'client_id' => $f3->get( "ORCID_OAUTH_CLIENT_ID" ),
+			'client_secret' => $f3->get( "ORCID_OAUTH_CLIENT_SECRET" )
+		))
+	));
+
+	$result = curl_exec($curl);
+	//$info = curl_getinfo($curl);
+	$response = json_decode($result, true);
+
+	if( !@$response["orcid"] )
+	{
+		$f3->set( "error_message", "" );
+		if( @$response["error-desc"][0]["value"] )
+		{
+			$f3->set( "error_message", $response["error-desc"][0]["value"] );
+		}
+		
+		$f3->push( "SESSION.messages", Template::instance()->render("msg-failed-sync.htm") );
+		header( "Location: /profile" );
+		return;
+	}
+
+	$record = new UosOrcid( $f3->get( "SESSION.pinumber" ), $response["orcid"] );
+	if( !$record->write() )
+	{
+		$f3->push( "SESSION.messages", Template::instance()->render("msg-db-error.htm") );
+		header( "Location: /profile" );
+		return;
+	}
+
+	$f3->push( "SESSION.messages", Template::instance()->render("msg-updated.htm") );
+	header( "Location: /profile" );
+}

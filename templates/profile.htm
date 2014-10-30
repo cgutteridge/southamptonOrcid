@@ -3,7 +3,10 @@
 
 <check if='{{ @record }}'>
  <true>
-   You HAVE an ORCID
+   <p>You HAVE an ORCID. Your ORCID is {{ @record->orcidLink() | raw }}
+    <div class='big-button'>
+      <a href='/orcid-authorise'>Change ORCID</a>
+    </div>
    loadinfo
    change
    clear

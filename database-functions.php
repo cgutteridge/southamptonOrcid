@@ -95,6 +95,20 @@ class UosOrcid
 		return $result;
 	}
 		
+	#########################################
+	# utility functions
+	# (which are not very MVC, sorry)
+	#########################################
+
+	public function orcidUrl()
+	{
+		return "http://orcid.org/".$this->orcid;
+	}
+
+	public function orcidLink()
+	{
+		return "<a href='".$this->orcidUrl()."'>".$this->orcid."</a>";
+	}
 }
 
 class UosOrcidDB
