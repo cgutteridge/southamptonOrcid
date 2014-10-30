@@ -1,4 +1,11 @@
-live_server=false
+
+[website]
+
+; prod,pre,dev. Sets a message in the banner for pre and dev.
+site_stage=dev
+
+; include trailing slash
+site_url=https://orcid.soton.ac.uk/
 
 [database]
 
@@ -11,7 +18,10 @@ db_name=
 
 ORCID_OAUTH_CLIENT_ID=
 ORCID_OAUTH_CLIENT_SECRET=
-ORCID_OAUTH_AUTHORIZATION_URL=https://sandbox.orcid.org/oauth/authorize
-ORCID_OAUTH_TOKEN_URL=https://pub.sandbox.orcid.org/oauth/token
-ORCID_OAUTH_REDIRECT_URI=https://orcid.soton.ac.uk/orcid-return
+
+; either sandbox.orcid.org or orcid.org
+ORCID_DOMAIN=sandbox.orcid.org
+
+; either pub or api
+ORCID_API=pub
 

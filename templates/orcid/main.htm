@@ -24,9 +24,7 @@
 					<h2>{{@app_tag_line}}</h2>
 				</div>
 			</div>
-			<check if="{{ !@live_server }}">
-				<div class='warning-banner'>WARNING. This is not the active service. This website is for testing purposes only. Do not use.</div>
-			</check>
+			<include href="{{'stage-banner-'.@site_stage.'.htm'}}" />
 			<div class="uos-main-block">
 				<div class="uos-left-block">
 					<repeat group="{{@left_column}}" value="{{@template}}">

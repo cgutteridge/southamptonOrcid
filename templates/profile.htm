@@ -2,8 +2,21 @@
 <p>Hello, {{@SESSION.givenname}} {{@SESSION.familyname}}.</p>
 
 <check if='{{ @record }}'>
- <true>
-   <p>You HAVE an ORCID. Your ORCID is {{ @record->orcidLink() | raw }}
+  <true>
+    <p>You currently do have an ORCID with your University of Southampton identity. Your ORCID is {{ @record->orcidLink() | raw }}</p>
+
+    <div id='info'></div>
+<script type='text/javascript'>
+$(document).ready( function() { 
+	var orcid='{{@record->orcid()}}';
+	$( '#info' ).html( "Looking up ORCID <a href='http://orcid.org/"+orcid+"'>"+orcid+"</a> in the orcid.org database..." );
+	$.ajax( "/orcid/"+orcid+".json" ).success( function(data) {
+		var pd = data["orcid-profile"]["orcid-bio"]["personal-details"];
+		var name = pd["family-name"]["value"]+", "+pd["given-names"]["value"];
+		$('#info').html( "<p>FOUND <a href='http://orcid.org/"+orcid+"'>"+orcid+"</a> in public database.</p><p>Name: <strong>"+name+"</strong></p>" );
+	} );
+} );
+</script>
     <div class='big-button'>
       <a href='/orcid-authorise'>Change ORCID</a>
     </div>
@@ -28,30 +41,5 @@
 <li><form method='post' action='/remove'><input type='submit' value='Remove my ORCID id' /></form> - not recommended</li>
 <li><form method='post' action='/set'>Change my ORCID to orcid.org/<input name='orcid' width='20' /><input type='submit' value='save' /></form></li>
 </ol>
-
-<hr>
-
-<p>Hello, Christopher Gutteridge. You currently have an no ORCID registered with the University of Southampton.</p>
-
-<p>If you haven't already <a href='https://orcid.org/register'>registed at orcid.org</a>, please do so now and note the 16 digit code.</p>
-
-<p>Available actions:</p>
-<ol>
-<li><form method='post' action='/set'>Change my ORCID to orcid.org/<input name='orcid' width='20' /><input type='submit' value='save' /></form></li>
-</ol>
-
-<hr />
-
-<div id='info'></div>
-<script type='text/javascript'>
-$(document).ready( function() { 
-	var orcid='0000-0001-9201-5987';
-	$( '#info' ).html( "Looking up ORCID <a href='http://orcid.org/"+orcid+"'>"+orcid+"</a> in the orcid.org database..." );
-	$.ajax( "/orcid/"+orcid+".json" ).success( function(data) {
-		var pd = data["orcid-profile"]["orcid-bio"]["personal-details"];
-		var name = pd["family-name"]["value"]+", "+pd["given-names"]["value"];
-		$('#info').html( "<p>FOUND <a href='http://orcid.org/"+orcid+"'>"+orcid+"</a> in public database.</p><p>Name: <strong>"+name+"</strong></p>" );
-	} );
-} );
-</script>
 </check>
+

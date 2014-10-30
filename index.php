@@ -3,7 +3,12 @@ $f3=require('lib/fatfree-master/lib/base.php');
 $f3->config($f3->get("ROOT").$f3->get("BASE").'/config.ini');
 $f3->config($f3->get("ROOT").$f3->get("BASE").'/local.ini');
 
-if( !$f3->get( "live_server" ) )
+$f3->set( "ORCID_OAUTH_REDIRECT_URI", $f3->get( "site_url" )."orcid-return" );
+$f3->set( "ORCID_SITE", "http://".$f3->get( "ORCID_DOMAIN" )."/" );
+$f3->set( "ORCID_OAUTH_AUTHORIZATION_URL","https://".$f3->get( "ORCID_DOMAIN" )."/oauth/authorize");
+$f3->set( "ORCID_OAUTH_TOKEN_URL","https://".$f3->get( "ORCID_API" ).".".$f3->get( "ORCID_DOMAIN" )."/oauth/token");
+
+if( $f3->get( "site_stage" ) != "prod" )
 {
 	$f3->set('DEBUG',3);
 }
