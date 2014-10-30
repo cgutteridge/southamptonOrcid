@@ -1,12 +1,43 @@
 <?php
 
 
-function front_page($f3)
+function local_authenticate($f3)
 {
-	$f3->set("title", "Hello");
-	$f3->set('templates', array("hello.htm"));
+	$result = authenticate($f3);
+	if( is_array( $result ) )
+	{
+		$f3->set("SESSION.usertype", $result["usertype"] );
+		$f3->set("SESSION.staffid", $result["staffid"] );
+		$f3->set("SESSION.givenname", $result["givenname"] );
+		$f3->set("SESSION.familyname", $result["familyname"] );
+		$f3->set("SESSION.department", $result["department"] );
+		$f3->set("SESSION.departmentcode", $result["departmentcode"] );
+	}
+}
+
+function page_logout($f3)
+{
+	$f3->set("SESSION.authenticated", false);
+	$f3->set("SESSION.username", null);
+	
+	$f3->set("title", "Logout");
+	$f3->set('templates', array("logout.htm"));
 
 	echo Template::instance()->render($f3->get("STYLE")."/main.htm");
+}
+
+function page_frontpage($f3)
+{
+	$f3->set("title", "Introduction");
+	$f3->set('templates', array("frontpage.htm"));
+
+	echo Template::instance()->render($f3->get("STYLE")."/main.htm");
+}
+function page_profile($f3)
+{
+	local_authenticate($f3);
+	print "Your profile: ";
+	print $f3->get( "SESSION.givenname" );
 }
 
 function orcid_json($f3)
@@ -29,3 +60,4 @@ function orcid_json($f3)
 	header( "Content-type: text/json" );
 	print $result;
 }
+

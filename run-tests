@@ -1,0 +1,68 @@
+#!/usr/bin/env php
+<?php
+
+if( php_sapi_name() != "cli" )
+{
+	print "<p>These tests will modify the database and should only be used on a non live copy and only from the command line.\n";
+	exit( 1 );
+}
+
+
+$f3=require('lib/fatfree-master/lib/base.php');
+$f3->config($f3->get("ROOT").$f3->get("BASE").'/config.ini');
+$f3->config($f3->get("ROOT").$f3->get("BASE").'/secrets.ini');
+require_once('database-functions.php');
+
+$p1 = "1000000";
+$p2 = "1000001";
+$o1 = "0000-0000-1234-0001";
+$o2 = "0000-0000-1234-0002";
+$o1a = "0000-0000-1234-0003";
+
+$db = UosOrcidDB::db();
+assert( $db, "Connected to database" );
+
+$d1 = new uosOrcid( $p1, $o1 );
+$d2 = new uosOrcid( $p2, $o2 );
+assert( $d1->write(), "Write first record" );
+assert( $d2->write(), "Write second record" );
+
+$d1_db = UosOrcid::fromPinumber( $p1 );
+assert( $d1_db, "fromPinumber" );
+assert( $d1_db->pinumber()==$p1, "fromPinumber : correct pinumber" );
+assert( $d1_db->orcid()==$o1, "fromPinumber : correct orcid" );
+
+$d2_db = UosOrcid::fromOrcid( $o2 );
+assert( $d2_db, "fromOrcid" );
+assert( $d2_db->pinumber()==$p2, "fromOrcid : correct pinumber" );
+assert( $d2_db->orcid()==$o2, "fromOrcid : correct orcid" );
+
+$d3_db = UosOrcid::fromPinumber( "bad value" );
+assert( !$d3_db, "check bad value for pinumber yields no object" );
+
+$d4_db = UosOrcid::fromOrcid( "bad value" );
+assert( !$d4_db, "check bad value for orcid yields no object" );
+
+$d1a = new uosOrcid( $p1, $o1a );
+assert( $d1a->write(), "check rewrite" );
+$d1a_db = UosOrcid::fromPinumber( $p1 );
+assert( $d1a_db->pinumber()==$p1, "rewritten : correct pinumber" );
+assert( $d1a_db->orcid()==$o1a, "rewritten : correct orcid" );
+
+$d1b_db = UosOrcid::fromOrcid( $o1 );
+assert( !$d1b_db, "check rewrite entirely replaced previous value" );
+
+$all = UosOrcid::allRecords();
+assert( $all, "allRecords returned value" );
+assert( is_array($all), "allRecords returned array" );
+assert( sizeof($all)>=2, "allRecords returned array of 2 or more" );
+
+assert( $d1a_db->remove(), "remove first" );
+assert( $d2_db->remove(), "remove second" );
+$all2 = UosOrcid::allRecords();
+assert( sizeof($all2)==sizeof($all)-2, "removing 2 records make all records 2 smaller" );
+
+assert( !UosOrcid::fromPinumber( $p1 ), "check removed records can't be found (1)" );
+assert( !UosOrcid::fromPinumber( $p2 ), "check removed records can't be found (2)" );
+
+exit( 0 );

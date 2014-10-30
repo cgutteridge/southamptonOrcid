@@ -30,10 +30,12 @@
 			</script>
 			<div class="uos-show-nav" id="uos-show-nav" onclick="showNavigation()">Show navigation</div>
 			<div class="uos-hide-nav" id="uos-hide-nav" onclick="hideNavigation()">Hide navigation</div>
+
+
 			<div class="uos-header" id="uos-header">
 				<div class="uos-logo"> </div>
-				<check if="{{isset(@user)}}">
-					<div class="uos-logged-in-user">Logged in as {{@user->givenname}} {{@user->familyname}} <a href="{{@BASE}}/logout">Log out</a></div>
+				<check if="{{@SESSION.authenticated}}">
+					<div class="uos-logged-in-user">Logged in as {{@SESSION.givenname}} {{@SESSION.familyname}} <a href="{{@BASE}}/logout">Log out</a></div>
 				</check>
 				<div class="uos-app-name">
 					<h1>{{@app_name}}</h1>
