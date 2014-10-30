@@ -1,5 +1,6 @@
 <?php
 
+require_once( 'database-functions.php' );
 
 function local_authenticate($f3)
 {
@@ -12,32 +13,57 @@ function local_authenticate($f3)
 		$f3->set("SESSION.familyname", $result["familyname"] );
 		$f3->set("SESSION.department", $result["department"] );
 		$f3->set("SESSION.departmentcode", $result["departmentcode"] );
+		if( $f3->get( "SERVER.REQUEST_METHOD" )=="POST" &&
+		    $f3->get( "REQUEST.pass_through" ) )
+		{
+			// redirerct to GET version of this page
+			header( "Location: ".$f3->get( "REQUEST.pass_through" ) );
+			return;
+		}
+
 	}
+}
+
+function page_error($f3)
+{
+	$f3->set("title", $f3->get('ERROR.code')." ".$f3->get('ERROR.status' ));
+	$f3->set('templates', array("error.htm"));
+	if( $f3->get( "ERROR.code" )==500 ) { header( "HTTP/1.1 200 But really 500" ); }
+	render_page($f3);
 }
 
 function page_logout($f3)
 {
 	$f3->set("SESSION.authenticated", false);
 	$f3->set("SESSION.username", null);
-	
-	$f3->set("title", "Logout");
-	$f3->set('templates', array("logout.htm"));
 
-	echo Template::instance()->render($f3->get("STYLE")."/main.htm");
+	$f3->push( "SESSION.messages", Template::instance()->render("msg-logout.htm") );
+
+	# return to homepage
+	header( "Location: /" );
 }
 
 function page_frontpage($f3)
 {
 	$f3->set("title", "Introduction");
 	$f3->set('templates', array("frontpage.htm"));
-
-	echo Template::instance()->render($f3->get("STYLE")."/main.htm");
+	render_page($f3);
 }
 function page_profile($f3)
 {
 	local_authenticate($f3);
-	print "Your profile: ";
-	print $f3->get( "SESSION.givenname" );
+	$f3->set("title", "Your ORCID Profile");
+	$f3->set('templates', array("profile.htm"));
+	$f3->set('record', UosOrcid::fromPinumber( $f3->get( "SESSION.pinumber" )));
+	render_page($f3);
+}
+
+function render_page($f3)
+{
+	print Template::instance()->render($f3->get("STYLE")."/main.htm");
+	
+	// clear messages once we've rendered them.
+	$f3->set( "SESSION.messages", array() );
 }
 
 function orcid_json($f3)
@@ -60,4 +86,7 @@ function orcid_json($f3)
 	header( "Content-type: text/json" );
 	print $result;
 }
+
+#######################################################
+
 

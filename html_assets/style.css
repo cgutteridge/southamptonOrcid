@@ -8,11 +8,44 @@
 	background-color: #2c5c81;
 	background-image: linear-gradient(to bottom, #2c5c81 0%, #12324c 90%);
 	color: #ffffff;
-	display: block;
+	display: inline-block;
 	padding: 1em 4em;
 	border-radius: 1em;
 }
 .big-button a:hover {
 	text-decoration: none;
 	background-image: linear-gradient(to bottom, #4c7ca1 0%, #32527c 90%);
+}
+.warning-banner {
+	background-color: orange;
+	background-image: linear-gradient(to bottom, orange 0%, red 90%);
+	color: black;
+	display: block;
+	padding: 1em 4em;
+	border-radius: 1em;
+	margin: 1em;
+	font-size: 150%;
+}
+.debug-message {
+	background-color: #ccc;
+	border: solid 3px #2c5c81;
+	color: black;
+	display: block;
+	padding: 1em;
+	border-radius: 1em;
+	margin: 1em 0em;
+}
+.debug-message p {
+	margin-top: 0;
+}
+.orcid-message {
+	background-color: green;
+	background-image: linear-gradient(to bottom, green 0%, yellow 90%);
+	color: black;
+	display: block;
+	padding: 0.2em 1em;
+	text-align: center;
+	border-radius: 1em;
+	margin: 0 0 1em 0;
+	font-weight: bold;
 }

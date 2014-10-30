@@ -1,6 +1,22 @@
-<p>If you have already obtained an ORCID id code, please link it to your university identity using this page. If you don't already have an ORCID id then you should <a href='https://orcid.org/register'>register for an ORCID id</a>. </p>
 
-<hr>
+<p>Hello, {{@SESSION.givenname}} {{@SESSION.familyname}}.</p>
+
+<check if='{{ @record }}'>
+ <true>
+   You HAVE an ORCID
+   loadinfo
+   change
+   clear
+ </true>
+ <false>
+    <p>You do not have an ORCID linked to your University of Southampton identity. Use the button below to link your identity to your existing ORCID, or create one.</p>
+    <div class='big-button'>
+      <a href='/orcid-authorise'>Connect an ORCID</a>
+    </div>
+ </false>
+</check>
+
+<check if='{{ false }}'>
 
 <p>Hello, Christopher Gutteridge. You currently have an ORCID registered: <a href='http://orcid.org/0000-0001-9201-5987'>0000-0001-9201-5987</a>.</p>
 
@@ -35,3 +51,4 @@ $(document).ready( function() {
 	} );
 } );
 </script>
+</check>

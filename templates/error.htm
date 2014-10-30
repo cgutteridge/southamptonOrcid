@@ -1,0 +1,11 @@
+
+<p>Sorry, an error has errored.</p>
+<check if="{{ !@live_server }}">
+	<div class='debug-message'>
+		<p>This block is for debugging and won't appear on the live server.</p>
+		<p><strong>Context:</strong> {{ @ERROR.text }}</p>
+		<repeat group='{{ @ERROR.trace }}' value='{{ @frame }}'>
+			<div class='debug-frame'>{{ @frame.file }} at line {{ @frame.line }}</div>
+		</repeat>
+	</div>
+</check>

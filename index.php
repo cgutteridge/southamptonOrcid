@@ -1,12 +1,21 @@
 <?php
 $f3=require('lib/fatfree-master/lib/base.php');
 $f3->config($f3->get("ROOT").$f3->get("BASE").'/config.ini');
-$f3->config($f3->get("ROOT").$f3->get("BASE").'/secrets.ini');
+$f3->config($f3->get("ROOT").$f3->get("BASE").'/local.ini');
+
+if( !$f3->get( "live_server" ) )
+{
+	$f3->set('DEBUG',3);
+}
 
 # ensure that the authenticaed flag is always set.
-if( !$f3->exists( "SESSION.exists" ) )
+if( !$f3->exists( "SESSION.authenticated" ) )
 {
-	$f3->set( "SESSION.exists", false );
+	$f3->set( "SESSION.authenticated", false );
+}
+if( !$f3->exists( "SESSION.messages" ) )
+{
+	$f3->set( "SESSION.messages", array() );
 }
 
 #$f3->set("main_nav", array("Item 1"=>"#", "Item 2"=>"#", "Item 3"=>"#"));
