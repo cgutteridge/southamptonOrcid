@@ -21,8 +21,6 @@ function local_authenticate($f3)
 			header( "Location: ".$f3->get( "REQUEST.pass_through" ) );
 			return;
 		}
-
-
 	}
 }
 
@@ -139,8 +137,18 @@ function action_return_from_oauth($f3)
 {
 	local_authenticate($f3);
 
+	// detect any error message
+	if (@$_GET['error'] )
+	{
+		# this should not happen unless someone is doing something bad
+		# or doesn't have cookies enabled
+		$f3->push( "SESSION.messages", Template::instance()->render("msg-oauth-error.htm") );
+		header( "Location: /profile" );
+		return;
+	}
+		
 	// code is returned, check the state
-	if (!$_GET['state'] || $_GET['state'] !== $_COOKIE['oauth_state']) 
+	if (!@$_GET['state'] || $_GET['state'] !== @$_COOKIE['oauth_state']) 
 	{
 		# this should not happen unless someone is doing something bad
 		# or doesn't have cookies enabled
@@ -168,7 +176,6 @@ function action_return_from_oauth($f3)
 	$result = curl_exec($curl);
 	//$info = curl_getinfo($curl);
 	$response = json_decode($result, true);
-
 	if( !@$response["orcid"] )
 	{
 		$f3->set( "error_message", "" );

@@ -38,10 +38,12 @@
 .debug-message p {
 	margin-top: 0;
 }
+#your-orcid-info .field {
+	font-size: 120%;
+	margin-bottom: 0.5em;
+}
+
 .orcid-message {
-	background-color: green;
-	background-image: linear-gradient(to bottom, green 0%, yellow 90%);
-	color: black;
 	display: block;
 	padding: 0.2em 1em;
 	text-align: center;
@@ -49,7 +51,12 @@
 	margin: 0 0 1em 0;
 	font-weight: bold;
 }
-#your-orcid-info .field {
-	font-size: 120%;
-	margin-bottom: 0.5em;
+.orcid-message-info {
+	background-color: green;
+	background-image: linear-gradient(to bottom, green 0%, yellow 90%);
+	color: black;
 }
+.orcid-message-error {
+	background-color: red;
+	background-image: linear-gradient(to bottom, red 0%, yellow 90%);
+	color: black;
