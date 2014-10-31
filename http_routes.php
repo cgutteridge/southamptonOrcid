@@ -8,7 +8,7 @@ function local_authenticate($f3)
 	if( is_array( $result ) )
 	{
 		$f3->set("SESSION.usertype", $result["usertype"] );
-		$f3->set("SESSION.staffid", $result["staffid"] );
+		$f3->set("SESSION.pinumber", $result["staffid"] );
 		$f3->set("SESSION.givenname", $result["givenname"] );
 		$f3->set("SESSION.familyname", $result["familyname"] );
 		$f3->set("SESSION.department", $result["department"] );

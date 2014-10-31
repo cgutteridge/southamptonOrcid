@@ -62,6 +62,11 @@ assert( $d2_db->remove(), "remove second" );
 $all2 = UosOrcid::allRecords();
 assert( sizeof($all2)==sizeof($all)-2, "removing 2 records make all records 2 smaller" );
 
+$bad1 = new uosOrcid( $p1, "" );
+$bad2 = new uosOrcid( "", $o1 );
+assert( !$bad1->write(), "should fail writing with an empty pinumber" );
+assert( !$bad2->write(), "should fail writing with an empty orcid" );
+
 assert( !UosOrcid::fromPinumber( $p1 ), "check removed records can't be found (1)" );
 assert( !UosOrcid::fromPinumber( $p2 ), "check removed records can't be found (2)" );
 

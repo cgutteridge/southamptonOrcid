@@ -73,6 +73,8 @@ class UosOrcid
 	// return true if the write worked
 	public function write()
 	{
+		if( trim($this->pinumber) == '' ) { return false; }
+		if( trim($this->orcid) == '' ) { return false; }
 		$db = UosOrcidDB::db();
 		$sql = "REPLACE INTO orcid_map ( pinumber , orcid ) VALUES ("
 		     . "'".$db->real_escape_string( $this->pinumber )."',"
