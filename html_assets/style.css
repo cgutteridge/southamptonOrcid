@@ -49,3 +49,7 @@
 	margin: 0 0 1em 0;
 	font-weight: bold;
 }
+#your-orcid-info .field {
+	font-size: 120%;
+	margin-bottom: 0.5em;
+}

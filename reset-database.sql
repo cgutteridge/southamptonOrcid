@@ -16,6 +16,25 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `orcid_log`
+--
+
+DROP TABLE IF EXISTS `orcid_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `orcid_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `event_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `action` varchar(10) DEFAULT NULL,
+  `pinumber` varchar(16) NOT NULL,
+  `orcid` varchar(19) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `orcid` (`orcid`),
+  KEY `pinumber` (`pinumber`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `orcid_map`
 --
 
@@ -30,15 +49,6 @@ CREATE TABLE `orcid_map` (
   KEY `orcid` (`orcid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `orcid_map`
---
-
-LOCK TABLES `orcid_map` WRITE;
-/*!40000 ALTER TABLE `orcid_map` DISABLE KEYS */;
-/*!40000 ALTER TABLE `orcid_map` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -49,4 +59,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-10-29 18:13:10
+-- Dump completed on 2014-10-31 14:40:23

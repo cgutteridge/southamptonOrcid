@@ -93,7 +93,7 @@ function orcid_json($f3)
 	header( "Content-type: text/json" );
 	if( $httpCode != 200 )
 	{
-		print '{"error-desc":{"value":"Got '.$httpCode.' repsonse from the ORCID Server"}}';
+		print '{"error-desc":{"value":"Got '.$httpCode.' response from the ORCID Server"}}';
 		return;
 	}
 	print $result;

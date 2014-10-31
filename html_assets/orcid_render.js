@@ -15,41 +15,53 @@ var orcid_fields = [
 	type: 'value' 
 },
 { 
-	label: "Last Modified Date", 
+	label: "Last Modified", 
 	path: ["orcid-history","last-modified-date"],
-	type: 'timestamp' 
+	type: 'time' 
 },
 { 
-	label: "Submission Date", 
+	label: "Created", 
 	path: ["orcid-history","submission-date"],
-	type: 'timestamp' 
+	type: 'time' 
+},
+{
+	label: "Websites", 
+	path: ["orcid-bio","researcher-urls","researcher-url"],
+	type: 'links' 
+},
+{
+	label: "Keywords", 
+	path: ["orcid-bio","keywords","keyword"],
+	type: 'values' 
+},
+{
+	label: "Debug Record",
+	path: [],
+	type: 'debug'
 }
 ];
 
 
-$(document).ready( function() { 
-	
-	var orcid='{{@record->orcid()}}';
-	
+function updateOrcidRecord( orcid, target )
+{	
 	$( '#your-orcid-info' ).html( "Looking up your ORCID..." );
 	$.ajax( "/orcid/"+orcid+".json" )
-		.success( renderOrcid )
+		.success( renderOrcid.bind(target) )
 		.fail( function() {
-			$('#your-orcid-info').text('Failed to connect to ORCID server.');
-		});
-} );
+			this.text('Failed to connect to ORCID server.');
+		}).bind(target);
+}
 
 function renderOrcid( data )
 {
 	if( data["error-desc"] )
 	{
-               	$('#your-orcid-info').text( "Error getting data from ORCID: "+data["error-desc"]["value"] );
+               	this.text( "Error getting data from ORCID: "+data["error-desc"]["value"] );
 		return;
 	}
 
 	var profile = data["orcid-profile"];
-	var pre = $("<pre><pre>");
-	$('#your-orcid-info').html('');
+	this.html('');
 	for( i=0; i<orcid_fields.length; ++i )
 	{
 		var field = orcid_fields[i];
@@ -66,12 +78,41 @@ function renderOrcid( data )
 		{
 			span.text( value.value );
 		}
+		if( field.type == 'time' )
+		{
+			span.text( new Date(value.value).toLocaleString() );
+		}
+		if( field.type == 'values' )
+		{
+			var list = [];
+			for( j=0;j<value.length;++j )
+			{
+				list.push( value[j].value );
+			}
+			span.text( list.join( ", ") );
+		}
+		if( field.type == 'links' )
+		{
+			var first = true;
+			for( j=0;j<value.length;++j )
+			{
+				if( !first ) { span.append( $("<span>, </span>") ); }
+				span.append( 
+					$("<a></a>")
+						.attr( 'href', value[j].url.value )
+						.text( value[j]["url-name"].value ) );
+				first = false;
+			}
+		}
+		if( field.type == 'debug' )
+		{
+			span = $("<pre></pre>")
+				.text( JSON.stringify( value, null, '\t' ) );
+		}
+
 		$( "<div class='field'><strong>"+field.label+":</strong> </div>" )
 			.append( $("<span class='value'></span> ").append(span) )
-			.appendTo( $('#your-orcid-info') );
+			.appendTo( this );
 	}
 
-	$("<pre></pre>")
-		.text( JSON.stringify( data['orcid-profile'], null, '\t' ) )
-		.appendTo( $('#your-orcid-info') );
 }
