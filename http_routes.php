@@ -22,6 +22,7 @@ function local_authenticate($f3)
 			return;
 		}
 
+
 	}
 }
 
@@ -89,9 +90,12 @@ function orcid_json($f3)
 	$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 	curl_close($ch); 
 
-	#print $httpCode;  // not being smart about errors yet
-
 	header( "Content-type: text/json" );
+	if( $httpCode != 200 )
+	{
+		print '{"error-desc":{"value":"Got '.$httpCode.' repsonse from the ORCID Server"}}';
+		return;
+	}
 	print $result;
 }
 
