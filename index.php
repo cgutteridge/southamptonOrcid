@@ -6,7 +6,8 @@ $f3->config($f3->get("ROOT").$f3->get("BASE").'/local.ini');
 $f3->set( "ORCID_OAUTH_REDIRECT_URI", $f3->get( "site_url" )."orcid-return" );
 $f3->set( "ORCID_SITE", "http://".$f3->get( "ORCID_DOMAIN" )."/" );
 $f3->set( "ORCID_OAUTH_AUTHORIZATION_URL","https://".$f3->get( "ORCID_DOMAIN" )."/oauth/authorize");
-$f3->set( "ORCID_OAUTH_TOKEN_URL","https://".$f3->get( "ORCID_API" ).".".$f3->get( "ORCID_DOMAIN" )."/oauth/token");
+$f3->set( "ORCID_API_URL","https://".$f3->get( "ORCID_API" ).".".$f3->get( "ORCID_DOMAIN" ));
+$f3->set( "ORCID_OAUTH_TOKEN_URL",$f3->get( "ORCID_API_URL" )."/oauth/token");
 
 if( $f3->get( "site_stage" ) != "prod" )
 {

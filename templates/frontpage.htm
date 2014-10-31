@@ -1,12 +1,8 @@
 <p>The University of Southampton recommends that all research active members should register an <a href='http://orcid.org/'>ORCID</a>. This will be used to connect you to your work, even if you change instituion or even country. They look like a credit card number, eg. <a href='http://orcid.org/0000-0001-9201-5987'>0000-0001-9201-5987</a>.</p>
 
-
-
 <check if="{{@SESSION.authenticated}}">
   <true>
-    <div class='big-button'>
-      <a href='/profile'>View and update ORCID settings for {{@SESSION.givenname}} {{@SESSION.familyname}}</a>
-    </div>
+    <div><a class='big-button' href='/profile'>View and update ORCID settings for {{@SESSION.givenname}} {{@SESSION.familyname}}</a></div>
   </true>
   <false>
     <form action="/profile" method="POST">

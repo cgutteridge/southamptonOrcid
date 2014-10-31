@@ -102,9 +102,12 @@ class UosOrcid
 
 	public function orcidUrl()
 	{
-		return "http://orcid.org/".$this->orcid;
+		$f3 = Base::instance();
+		return "http://".$f3->get("ORCID_DOMAIN")."/".$this->orcid;
 	}
 
+	// nb this function only uses single quotes as it is embedded
+	// in a javascript "" string.
 	public function orcidLink()
 	{
 		return "<a href='".$this->orcidUrl()."'>".$this->orcid."</a>";

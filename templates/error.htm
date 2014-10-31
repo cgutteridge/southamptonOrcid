@@ -1,6 +1,6 @@
 
 <p>Sorry, an error has errored.</p>
-<check if="{{ !@live_server }}">
+<check if="{{ @site_stage != 'prod' }}">
 	<div class='debug-message'>
 		<p>This block is for debugging and won't appear on the live server.</p>
 		<p><strong>Context:</strong> {{ @ERROR.text }}</p>

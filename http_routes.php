@@ -13,6 +13,7 @@ function local_authenticate($f3)
 		$f3->set("SESSION.familyname", $result["familyname"] );
 		$f3->set("SESSION.department", $result["department"] );
 		$f3->set("SESSION.departmentcode", $result["departmentcode"] );
+		$f3->set("SESSION.email", $result["email"] );
 		if( $f3->get( "SERVER.REQUEST_METHOD" )=="POST" &&
 		    $f3->get( "REQUEST.pass_through" ) )
 		{
@@ -36,28 +37,28 @@ function page_error($f3)
 	render_page($f3);
 }
 
-function page_logout($f3)
-{
-	$f3->set("SESSION.authenticated", false);
-	$f3->set("SESSION.username", null);
-
-	$f3->push( "SESSION.messages", Template::instance()->render("msg-logout.htm") );
-
-	# return to homepage
-	header( "Location: /" );
-}
-
 function page_frontpage($f3)
 {
 	$f3->set("title", "Introduction");
 	$f3->set('templates', array("frontpage.htm"));
 	render_page($f3);
 }
+
 function page_profile($f3)
 {
 	local_authenticate($f3);
 	$f3->set("title", "Your ORCID Profile");
 	$f3->set('templates', array("profile.htm"));
+	$f3->set('record', UosOrcid::fromPinumber( $f3->get( "SESSION.pinumber" )));
+	render_page($f3);
+}
+
+function page_clear($f3)
+{
+	local_authenticate($f3);
+
+	$f3->set("title", "Forget your ORCID?");
+	$f3->set('templates', array("clear.htm"));
 	$f3->set('record', UosOrcid::fromPinumber( $f3->get( "SESSION.pinumber" )));
 	render_page($f3);
 }
@@ -76,9 +77,8 @@ function render_page($f3)
 
 function orcid_json($f3)
 {
-	# curl -H "Accept: application/orcid+json" 'http://pub.orcid.org/v1.1/0000-0001-7857-2795/orcid-bio' -L -i
 	$orcid = $f3->get("PARAMS.orcid" );
-	$url = "http://pub.orcid.org/v1.1/$orcid/orcid-bio";
+	$url = $f3->get("ORCID_API_URL")."/v1.1/$orcid/orcid-bio";
 
 	// we are the parent
 	$ch = curl_init();
@@ -96,10 +96,21 @@ function orcid_json($f3)
 }
 
 #######################################################
-# ORCID Auth Dance Steps
+# ORCID Actons
 #######################################################
 
-function orcid_authorise($f3)
+function action_logout($f3)
+{
+	$f3->set("SESSION.authenticated", false);
+	$f3->set("SESSION.username", null);
+
+	$f3->push( "SESSION.messages", Template::instance()->render("msg-logout.htm") );
+
+	# return to homepage
+	header( "Location: /" );
+}
+
+function action_authorise($f3)
 {
 	local_authenticate($f3);
 
@@ -112,12 +123,15 @@ function orcid_authorise($f3)
 		'redirect_uri' => $f3->get( "ORCID_OAUTH_REDIRECT_URI" ),
 		'scope' => '/authenticate',
 		'state' => $state,
+		'family_names' => $f3->get( "SESSION.familyname" ),
+		'given_names' => $f3->get( "SESSION.givenname" ),
+		'email' => $f3->get( "SESSION.email" ),
 	));
 
 	header('Location: ' . $url);
 }
 
-function orcid_return($f3)
+function action_return_from_oauth($f3)
 {
 	local_authenticate($f3);
 
@@ -173,5 +187,21 @@ function orcid_return($f3)
 	}
 
 	$f3->push( "SESSION.messages", Template::instance()->render("msg-updated.htm") );
+	header( "Location: /profile" );
+}
+
+function action_clear($f3)
+{
+	local_authenticate($f3);
+
+	$record = UosOrcid::fromPinumber( $f3->get( "SESSION.pinumber" ));
+	if( !$record->remove() )
+	{
+		$f3->push( "SESSION.messages", Template::instance()->render("msg-db-error.htm") );
+		header( "Location: /profile" );
+		return;
+	}
+
+	$f3->push( "SESSION.messages", Template::instance()->render("msg-cleared.htm") );
 	header( "Location: /profile" );
 }

@@ -3,43 +3,31 @@
 
 <check if='{{ @record }}'>
   <true>
-    <p>You currently do have an ORCID with your University of Southampton identity. Your ORCID is {{ @record->orcidLink() | raw }}</p>
+    <p>You currently do have an ORCID associated with your University of Southampton identity. Your ORCID is {{ @record->orcidLink() | raw }}</p>
 
-    <div id='info'></div>
+    <div id='your-orcid-info'></div>
+    <div>
+      <a class='big-button' href='/orcid-authorise'>Change ORCID</a>
+      <a class='big-button' href='/clear'>Forget ORCID</a>
+    </div>
+
 <script type='text/javascript'>
 $(document).ready( function() { 
 	var orcid='{{@record->orcid()}}';
-	$( '#info' ).html( "Looking up ORCID <a href='http://orcid.org/"+orcid+"'>"+orcid+"</a> in the orcid.org database..." );
+	$( '#your-orcid-info' ).html( "Looking up your ORCID..." );
 	$.ajax( "/orcid/"+orcid+".json" ).success( function(data) {
 		var pd = data["orcid-profile"]["orcid-bio"]["personal-details"];
 		var name = pd["family-name"]["value"]+", "+pd["given-names"]["value"];
-		$('#info').html( "<p>FOUND <a href='http://orcid.org/"+orcid+"'>"+orcid+"</a> in public database.</p><p>Name: <strong>"+name+"</strong></p>" );
+		var pre = $("<pre><pre>");
+		pre.text( JSON.stringify( data, null, '\t' ) );
+		$('#your-orcid-info').html('').append( pre );
 	} );
 } );
 </script>
-    <div class='big-button'>
-      <a href='/orcid-authorise'>Change ORCID</a>
-    </div>
-   loadinfo
-   change
-   clear
+
  </true>
  <false>
     <p>You do not have an ORCID linked to your University of Southampton identity. Use the button below to link your identity to your existing ORCID, or create one.</p>
-    <div class='big-button'>
-      <a href='/orcid-authorise'>Connect an ORCID</a>
-    </div>
+    <div><a class='big-button' href='/orcid-authorise'>Connect an ORCID</a></div>
  </false>
 </check>
-
-<check if='{{ false }}'>
-
-<p>Hello, Christopher Gutteridge. You currently have an ORCID registered: <a href='http://orcid.org/0000-0001-9201-5987'>0000-0001-9201-5987</a>.</p>
-
-<p>Available actions:</p>
-<ol>
-<li><form method='post' action='/remove'><input type='submit' value='Remove my ORCID id' /></form> - not recommended</li>
-<li><form method='post' action='/set'>Change my ORCID to orcid.org/<input name='orcid' width='20' /><input type='submit' value='save' /></form></li>
-</ol>
-</check>
-
