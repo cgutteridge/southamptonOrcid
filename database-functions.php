@@ -56,11 +56,27 @@ class UosOrcid
 	{
 		$db = UosOrcidDB::db();
 		$records = array();
-		$sql = "SELECT pinumber, orcid FROM orcid_map";
+		$sql = "SELECT pinumber, orcid, modified FROM orcid_map";
 		$result = $db->query( $sql );
 		while( $row = $result->fetch_assoc() )
 		{
-			$records[ $row["pinumber"] ] = new UosOrcid( $row["pinumber"], $row["orcid"], true );
+			$records[] = $row;
+		}
+		$result->free();
+		return $records;
+	}
+
+	// this may one day be way too much data, but should be
+	// fine for a few years
+	public static function allLog()
+	{
+		$db = UosOrcidDB::db();
+		$records = array();
+		$sql = "SELECT * FROM orcid_log ORDER BY id";
+		$result = $db->query( $sql );
+		while( $row = $result->fetch_assoc() )
+		{
+			$records[] = $row;
 		}
 		$result->free();
 		return $records;
@@ -79,8 +95,15 @@ class UosOrcid
 		$sql = "REPLACE INTO orcid_map ( pinumber , orcid ) VALUES ("
 		     . "'".$db->real_escape_string( $this->pinumber )."',"
 		     . "'".$db->real_escape_string( $this->orcid )."' )";
-		$result = $db->query( $sql );
-		return $result;
+		if( ! $db->query( $sql ) ) { return false; }
+
+		$sql = "INSERT INTO orcid_log ( pinumber , orcid, action ) VALUES ("
+		     . "'".$db->real_escape_string( $this->pinumber )."',"
+		     . "'".$db->real_escape_string( $this->orcid )."',"
+		     . "'write' )";
+		if( ! $db->query( $sql ) ) { print '!! error writing log, data wrote ok !!'; }
+		
+		return true;
 	}
 
 	// return true if the remove worked
@@ -89,12 +112,17 @@ class UosOrcid
 		$db = UosOrcidDB::db();
 		$sql = "DELETE FROM orcid_map WHERE "
 		     . "pinumber='".$db->real_escape_string( $this->pinumber )."'";
-		$result = $db->query( $sql );
-		if( $result ) 
-		{
-			$this->fromDb = false;
-		}
-		return $result;
+		if( ! $db->query( $sql ) ) { return false; }
+
+		$this->fromDb = false;
+
+		$sql = "INSERT INTO orcid_log ( pinumber , orcid, action ) VALUES ("
+		     . "'".$db->real_escape_string( $this->pinumber )."',"
+		     . "'".$db->real_escape_string( $this->orcid )."',"
+		     . "'clear' )";
+		if( ! $db->query( $sql ) ) { print '!! error writing log, data removed ok !!'; }
+
+		return true;
 	}
 		
 	#########################################

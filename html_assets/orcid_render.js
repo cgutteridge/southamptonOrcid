@@ -35,7 +35,7 @@ var orcid_fields = [
 	type: 'values' 
 },
 {
-	label: "Debug Record",
+	label: "Full Record",
 	path: [],
 	type: 'debug'
 }

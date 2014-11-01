@@ -2,7 +2,7 @@
 
 require_once( 'database-functions.php' );
 
-function local_authenticate($f3)
+function local_authen($f3)
 {
 	$result = authenticate($f3);
 	if( is_array( $result ) )
@@ -22,6 +22,28 @@ function local_authenticate($f3)
 			return;
 		}
 	}
+}
+
+function local_authz($f3,$priv )
+{
+	$allowed = $f3->get( "authz.$priv" );
+	if( !is_array( $allowed ) ) { $allowed = array( $allowed ); }
+	$username = $f3->get( "SESSION.username" );
+	$ok=false;
+	foreach( $allowed as $username_with_right )
+	{
+		if( $username_with_right == $username )
+		{
+			$ok=true;
+			break;
+		}
+	}
+	if( !$ok )
+	{
+		$f3->error( 403 );
+		return false;
+	}
+	return true;
 }
 
 #######################################################
@@ -45,7 +67,7 @@ function page_frontpage($f3)
 
 function page_profile($f3)
 {
-	local_authenticate($f3);
+	local_authen($f3);
 	$f3->set("title", "Your ORCID Profile");
 	$f3->set('templates', array("profile.htm"));
 	$f3->set('record', UosOrcid::fromPinumber( $f3->get( "SESSION.pinumber" )));
@@ -54,11 +76,42 @@ function page_profile($f3)
 
 function page_clear($f3)
 {
-	local_authenticate($f3);
+	local_authen($f3);
 
 	$f3->set("title", "Forget your ORCID?");
 	$f3->set('templates', array("clear.htm"));
 	$f3->set('record', UosOrcid::fromPinumber( $f3->get( "SESSION.pinumber" )));
+	render_page($f3);
+}
+
+function page_log( $f3 )
+{
+	local_authen($f3);
+	local_authz($f3,"log.view");
+
+	$f3->set("title", "Southampton ORCID Log" );
+	$f3->set("table.fields", array( 
+		array( "event_time", "Time"),
+		array( "action", "Action" ),
+		array( "pinumber", "UoS ID" ),
+		array( "orcid", "ORCID" ) ) );
+	$f3->set("table.data", UosOrcid::allLog() );
+	$f3->set('templates', array("data-table.htm"));
+	render_page($f3);
+}
+
+function page_data( $f3 )
+{
+	local_authen($f3);
+	local_authz($f3,"data.view");
+
+	$f3->set("title", "Southampton ORCID Data" );
+	$f3->set("table.fields", array( 
+		array( "pinumber", "UoS ID" ),
+		array( "orcid", "ORCID" ) ,
+		array( "modified", "Last Modified") ));
+	$f3->set("table.data", UosOrcid::allRecords() );
+	$f3->set('templates', array("data-table.htm"));
 	render_page($f3);
 }
 
@@ -114,7 +167,7 @@ function action_logout($f3)
 
 function action_authorise($f3)
 {
-	local_authenticate($f3);
+	local_authen($f3);
 
 	$state = bin2hex(openssl_random_pseudo_bytes(16));
 	setcookie('oauth_state', $state, time() + 3600, null, null, false, true);
@@ -135,7 +188,7 @@ function action_authorise($f3)
 
 function action_return_from_oauth($f3)
 {
-	local_authenticate($f3);
+	local_authen($f3);
 
 	// detect any error message
 	if (@$_GET['error'] )
@@ -203,7 +256,7 @@ function action_return_from_oauth($f3)
 
 function action_clear($f3)
 {
-	local_authenticate($f3);
+	local_authen($f3);
 
 	$record = UosOrcid::fromPinumber( $f3->get( "SESSION.pinumber" ));
 	if( !$record->remove() )
@@ -216,3 +269,4 @@ function action_clear($f3)
 	$f3->push( "SESSION.messages", Template::instance()->render("msg-cleared.htm") );
 	header( "Location: /profile" );
 }
+

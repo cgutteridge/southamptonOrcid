@@ -25,3 +25,6 @@ ORCID_DOMAIN=sandbox.orcid.org
 ; either pub or api
 ORCID_API=pub
 
+[security]
+
+GROUP.VIEWLOG=totl
