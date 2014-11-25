@@ -60,3 +60,9 @@
 	background-color: red;
 	background-image: linear-gradient(to bottom, red 0%, yellow 90%);
 	color: black;
+}
+.todo {
+	background-color: yellow;
+	font-weight: bold;
+	font-style: italic;
+}
