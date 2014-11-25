@@ -1,9 +1,20 @@
-Clone (usually from git@sourcekettle.ecs.soton.ac.uk:projects/fatfree-project.git)
 
-Then 
+ORCID WEBSITE
+
+git clone git@sourcekettle.ecs.soton.ac.uk:projects/orcid-website.git
 git submodule init
 git submodule update --recursive
 
-The idea is that by default LDAP auth is not currently enabled because you will want to write a shim which does something with user accounts for each user that logs in. It may be this was a mistake and you should update this project so auth works out of the box.
+cp local.ini.template local.ini
+
+(then edit the settings as appropriate)
+
+mysql -u .. -h .. -p < reset-database.sql
 
 
+
+On <live> never edit anything outside local.ini
+
+On <pre> never edit anything outside local.ini except (maybe) to try a bugfxx.
+
+Don't push anything to the reposiotry from <dev> until it's stable.
