@@ -27,4 +27,6 @@ ORCID_API=pub
 
 [security]
 
-GROUP.VIEWLOG=totl
+authz.log.view=totl
+authz.data.view=totl
+
