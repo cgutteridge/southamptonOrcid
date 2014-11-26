@@ -6,11 +6,14 @@
 		<link rel="stylesheet" href="{{@SCHEME}}://{{@HOST}}{{@BASE}}/html_assets/{{@STYLE}}/uos-internal.css" />
 		<link rel="stylesheet" media="screen" href="{{@SCHEME}}://{{@HOST}}{{@BASE}}/html_assets/{{@STYLE}}/uos-mobile.css">
 		<link rel="stylesheet" media="screen" href="{{@SCHEME}}://{{@HOST}}{{@BASE}}/html_assets/floraform/ff.css">
-		<script type="text/javascript" src="{{@SCHEME}}://{{@HOST}}{{@BASE}}/html_assets/tiny_mce/tiny_mce.js"></script>
+		<script type="text/javascript" src="{{@SCHEME}}://{{@HOST}}{{@BASE}}/html_assets/json2.min.js"></script>
 		<script src="{{@SCHEME}}://{{@HOST}}{{@BASE}}/html_assets/jquery.js"></script>
 		<script src="{{@SCHEME}}://{{@HOST}}{{@BASE}}/html_assets/floraform/ff.js"></script>
 		<link rel="stylesheet" media="screen" href="{{@SCHEME}}://{{@HOST}}{{@BASE}}/html_assets/style.css">
 		<title>{{@title}} - {{@app_name}}</title>
+		<script>
+var orcidConfig = { 'site_stage': '{{@site_stage}}' };
+		</script>
 	</head>
 	<body>
 		<div class="uos-container">
@@ -51,7 +54,4 @@
 			</div>
 		</div>
 	</body>
-<script>
-//$(document).ready(function(){ setTimeout(function(){ $('.orcid-message').fadeOut(); }, 3000 ); });
-</script>
 </html>

@@ -47,9 +47,9 @@ function updateOrcidRecord( orcid, target )
 	$( '#your-orcid-info' ).html( "Looking up your ORCID..." );
 	$.ajax( "/orcid/"+orcid+".json" )
 		.success( renderOrcid.bind(target) )
-		.fail( function() {
+		.fail( (function() {
 			this.text('Failed to connect to ORCID server.');
-		}).bind(target);
+		}).bind(target) );
 }
 
 function renderOrcid( data )
@@ -104,15 +104,46 @@ function renderOrcid( data )
 				first = false;
 			}
 		}
+
 		if( field.type == 'debug' )
 		{
-			span = $("<pre></pre>")
-				.text( JSON.stringify( value, null, '\t' ) );
+			if( orcidConfig.site_stage != 'dev' )
+			{
+				// don't show debug info on anything but dev.
+				continue;
+			}
+			span = $("<pre></pre>").text( "This field is only shown on development servers, not preprod or live.\r\n"+JSON.stringify( value, null, 2 ).replace( /\n/g, "\r\n") );
 		}
 
 		$( "<div class='field'><strong>"+field.label+":</strong> </div>" )
 			.append( $("<span class='value'></span> ").append(span) )
 			.appendTo( this );
 	}
+}
 
+// poly fill for Function.prototype.bind (missing on old IE)
+
+if (!Function.prototype.bind) {
+  Function.prototype.bind = function(oThis) {
+    if (typeof this !== 'function') {
+      // closest thing possible to the ECMAScript 5
+      // internal IsCallable function
+      throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
+    }
+
+    var aArgs   = Array.prototype.slice.call(arguments, 1),
+        fToBind = this,
+        fNOP    = function() {},
+        fBound  = function() {
+          return fToBind.apply(this instanceof fNOP && oThis
+                 ? this
+                 : oThis,
+                 aArgs.concat(Array.prototype.slice.call(arguments)));
+        };
+
+    fNOP.prototype = this.prototype;
+    fBound.prototype = new fNOP();
+
+    return fBound;
+  };
 }
