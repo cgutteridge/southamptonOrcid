@@ -125,23 +125,6 @@ class UosOrcid
 		return true;
 	}
 		
-	#########################################
-	# utility functions
-	# (which are not very MVC, sorry)
-	#########################################
-
-	public function orcidUrl()
-	{
-		$f3 = Base::instance();
-		return "http://".$f3->get("ORCID_DOMAIN")."/".$this->orcid;
-	}
-
-	// nb this function only uses single quotes as it is embedded
-	// in a javascript "" string.
-	public function orcidLink()
-	{
-		return "<a href='".$this->orcidUrl()."'>".$this->orcid."</a>";
-	}
 }
 
 class UosOrcidDB

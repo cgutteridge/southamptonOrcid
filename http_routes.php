@@ -2,6 +2,10 @@
 
 require_once( 'database-functions.php' );
 
+#######################################################
+# Authentication
+#######################################################
+
 function local_authen($f3)
 {
 	$result = authenticate($f3);
@@ -44,6 +48,17 @@ function local_authz($f3,$priv )
 		return false;
 	}
 	return true;
+}
+
+#######################################################
+# Renderers
+#######################################################
+
+function orcidLink( $id )
+{
+	$f3=Base::instance();
+	$url= "http://".$f3->get("ORCID_DOMAIN")."/".$id;
+	return "<span style='white-space:nowrap'>".$f3->get( "ICON" )."<a href='".$url."'>".$id."</a></span>";
 }
 
 #######################################################

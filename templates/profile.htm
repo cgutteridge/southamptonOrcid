@@ -3,13 +3,13 @@
 
 <check if='{{ @record }}'>
   <true>
-    <p>You currently do have an ORCID associated with your University of Southampton identity. Your ORCID is {{ @record->orcidLink() | raw }}</p>
+    <p>You currently do have an ORCID identity associated with your University of Southampton identity. Your ORCID iD is {{orcidLink( @record->orcid() )|raw}}.</p>
 
     <h3>Information from your ORCID record:</h3>
     <div id='your-orcid-info'></div>
     <div>
-      <a class='big-button' href='/orcid-authorise'>Change ORCID</a>
-      <a class='big-button' href='/clear'>Forget ORCID</a>
+      <a class='big-button' href='/orcid-authorise'>Change ORCID iD</a>
+      <a class='big-button' href='/clear'>Forget ORCID iD</a>
     </div>
 
     <script type='text/javascript' src='/html_assets/orcid_render.js'></script>
@@ -21,8 +21,8 @@ $(document).ready( function() {
 
  </true>
  <false>
-    <p>You do not have an ORCID linked to your University of Southampton identity. </p>
-    <div><a class='big-button' href='/orcid-authorise'>Connect an ORCID</a></div>
+    <p>You do not have an ORCID identity linked to your University of Southampton identity. </p>
+    <div><a class='big-button' href='/orcid-authorise'>Connect an ORCID iD</a></div>
  </false>
 </check>
 
