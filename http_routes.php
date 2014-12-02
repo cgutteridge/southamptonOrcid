@@ -1,66 +1,5 @@
 <?php
 
-require_once( 'database-functions.php' );
-
-#######################################################
-# Authentication
-#######################################################
-
-function local_authen($f3)
-{
-	$result = authenticate($f3);
-	if( is_array( $result ) )
-	{
-		$f3->set("SESSION.usertype", $result["usertype"] );
-		$f3->set("SESSION.pinumber", $result["staffid"] );
-		$f3->set("SESSION.givenname", $result["givenname"] );
-		$f3->set("SESSION.familyname", $result["familyname"] );
-		$f3->set("SESSION.department", $result["department"] );
-		$f3->set("SESSION.departmentcode", $result["departmentcode"] );
-		$f3->set("SESSION.email", $result["email"] );
-		if( $f3->get( "SERVER.REQUEST_METHOD" )=="POST" &&
-		    $f3->get( "REQUEST.pass_through" ) )
-		{
-			// redirerct to GET version of this page
-			header( "Location: ".$f3->get( "REQUEST.pass_through" ) );
-			return;
-		}
-	}
-}
-
-function local_authz($f3,$priv )
-{
-	$allowed = $f3->get( "authz.$priv" );
-	if( !is_array( $allowed ) ) { $allowed = array( $allowed ); }
-	$username = $f3->get( "SESSION.username" );
-	$ok=false;
-	foreach( $allowed as $username_with_right )
-	{
-		if( $username_with_right == $username )
-		{
-			$ok=true;
-			break;
-		}
-	}
-	if( !$ok )
-	{
-		$f3->error( 403 );
-		return false;
-	}
-	return true;
-}
-
-#######################################################
-# Renderers
-#######################################################
-
-function orcidLink( $id )
-{
-	$f3=Base::instance();
-	$url= "http://".$f3->get("ORCID_DOMAIN")."/".$id;
-	return "<span style='white-space:nowrap'>".$f3->get( "ICON" )."<a href='".$url."'>".$id."</a></span>";
-}
-
 #######################################################
 # Pages
 #######################################################
@@ -128,14 +67,6 @@ function page_data( $f3 )
 	$f3->set("table.data", UosOrcid::allRecords() );
 	$f3->set('templates', array("data-table.htm"));
 	render_page($f3);
-}
-
-function render_page($f3)
-{
-	print Template::instance()->render($f3->get("STYLE")."/main.htm");
-	
-	// clear messages once we've rendered them.
-	$f3->set( "SESSION.messages", array() );
 }
 
 #######################################################
