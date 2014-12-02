@@ -18,7 +18,14 @@ $(document).ready(function(){
     <repeat group="{{ @table.data }}" value="{{ @row }}">
       <tr>
         <repeat group="{{ @table.fields }}" value="{{ @field }}">
-          <td>{{ @row[@field[0]] }}</td>
+          <check if="{{ @field[0] == 'orcid' }}">
+            <true>
+              <td>{{orcidLink( @row[@field[0]] )|raw}}</td>
+            </true>
+            <false>
+              <td>{{ @row[@field[0]] }}</td>
+            </false>
+          </check>
         </repeat>
       </tr>
     </repeat>
